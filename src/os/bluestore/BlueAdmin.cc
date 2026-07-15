@@ -78,6 +78,11 @@ BlueStore::SocketHook::SocketHook(BlueStore& store)
       this,
       "print RocksDB sharding");
     ceph_assert(r == 0);
+    r = admin_socket->register_command(
+      "bluestore cache stats",
+      this,
+      "print cache performance stats"); /////////////AARYAN
+    ceph_assert(r == 0);
   }
 }
 
@@ -286,6 +291,106 @@ int BlueStore::SocketHook::call(
         c->object_read_samples.store(0, std::memory_order_relaxed);
       }
     }
+    return 0;
+  } else if (command == "bluestore cache stats") {  //////////AARYAN
+
+
+
+    f->open_object_section("cache_stats");
+    f->open_object_section("onode_cache");
+    
+
+/////////////////////////////////
+    uint64_t total_hits = 0;
+    uint64_t total_misses = 0;
+
+
+    
+    for (auto shard : store.onode_cache_shards) {
+      total_hits += shard->cache_hits.load(std::memory_order_relaxed);
+      total_misses += shard->cache_miss.load(std::memory_order_relaxed);
+    }
+    
+    uint64_t total_accesses = total_hits + total_misses;
+    
+    f->dump_unsigned("hits", total_hits);
+    f->dump_unsigned("misses", total_misses);
+    f->dump_unsigned("total_accesses", total_accesses);
+    
+    if (total_accesses > 0) {
+      double hit_ratio = static_cast<double>(total_hits) / static_cast<double>(total_accesses);
+      f->dump_float("hit_ratio", hit_ratio);
+    } else {
+      f->dump_float("hit_ratio", 0.0);
+    }
+    
+
+
+    f->close_section(); // onode_cache
+
+
+
+///start
+// --- INSERT NEW STATS HERE ---
+// --- INSERT NEW STATS HERE ---
+    f->dump_unsigned("onode_hits", store.logger->get(l_bluestore_onode_hits));
+    f->dump_unsigned("onode_misses", store.logger->get(l_bluestore_onode_misses));
+
+    f->open_object_section("cacheonode_lat");
+    // For time_avg, you typically access the accumulated values via the logger
+    f->dump_unsigned("avgcount", store.logger->get(l_bluestore_onode_cache_time_latency_time)); 
+    f->dump_float("sum", (double)store.logger->get(l_bluestore_onode_cache_time_latency_time)); 
+    f->close_section();
+
+    f->dump_unsigned("buffer_hit_bytes", store.logger->get(l_bluestore_buffer_hit_bytes));
+    f->dump_unsigned("buffer_miss_bytes", store.logger->get(l_bluestore_buffer_miss_bytes));
+
+    f->open_object_section("buffer_miss_lat");
+    f->dump_unsigned("avgcount", store.logger->get(l_bluestore_buffer_miss_lat));
+    f->dump_float("sum", (double)store.logger->get(l_bluestore_buffer_miss_lat));
+
+    // --- END INSERTION ---
+    // --- END INSERTION ---
+///end
+
+
+
+    f->close_section(); // cache_stats
+
+
+
+
+    
+
+//////rocksdb
+
+// --- Accessing RocksDB Metrics via Ceph PerfCounters Registry ---
+    f->open_object_section("rocksdb_perf_stats");
+    
+    auto collection = store.cct->get_perfcounters_collection();
+    
+    // Accessing RocksDB Metrics
+    if (collection) {
+        // Using the static_cast fallback to satisfy the compiler
+        collection->dump_formatted(f, false, static_cast<select_labeled_t>(0), "rocksdb", "");
+
+
+
+    } else {
+        f->dump_string("status", "perf counters collection not available");
+    }
+    
+    f->close_section();
+
+//////rocksdbend
+
+
+
+
+///rocksdb true end
+
+
+//////////////////////////
     return 0;
   } else {
     ss << "Invalid command" << std::endl;

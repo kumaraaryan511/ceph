@@ -186,6 +186,8 @@ enum {
   l_bluestore_extents,
   l_bluestore_blobs,
   l_bluestore_spanning_blobs,
+  l_bluestore_onode_cache_time_latency,                         //AARYAN
+  l_bluestore_onode_cache_time_latency_time, 
   //****************************************
 
   // buffer cache stats
@@ -194,6 +196,8 @@ enum {
   l_bluestore_buffer_bytes,
   l_bluestore_buffer_hit_bytes,
   l_bluestore_buffer_miss_bytes,
+  l_bluestore_buffer_miss_lat, ///////////AARYAN
+  l_bluestore_buffer_read_reqs,
   //****************************************
 
   // internal stats
@@ -250,7 +254,9 @@ enum {
   l_bluestore_runtime_frag_lat,
   l_bluestore_static_frag_lat,
   //****************************************
+
   l_bluestore_last
+  
 };
 
 #define META_POOL_ID ((uint64_t)-1ull)
@@ -1559,7 +1565,13 @@ public:
   struct OnodeCacheShard : public CacheShard {
     std::array<std::pair<ghobject_t, ceph::mono_clock::time_point>, 64> dumped_onodes;
 
+    
+
   public:
+
+    std::atomic<uint64_t> cache_hits{0};
+    std::atomic<uint64_t> cache_miss{0};/////////AARYAN
+
     OnodeCacheShard(CephContext* cct) : CacheShard(cct) {}
     static OnodeCacheShard *create(CephContext* cct, std::string type,
                                    PerfCounters *logger);

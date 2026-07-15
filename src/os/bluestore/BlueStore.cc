@@ -1924,6 +1924,8 @@ void BlueStore::BufferSpace::read(
   uint64_t miss_bytes = want_bytes - hit_bytes;
   cache->logger->inc(l_bluestore_buffer_hit_bytes, hit_bytes);
   cache->logger->inc(l_bluestore_buffer_miss_bytes, miss_bytes);
+
+  cache->logger->inc(l_bluestore_buffer_read_reqs, 1);//////AARYAN
 }
 
 void BlueStore::BufferSpace::_finish_write(BufferCacheShard* cache,
@@ -2081,7 +2083,7 @@ void BlueStore::OnodeSpace::_remove(const ghobject_t& oid)
   onode_map.erase(oid);
 }
 
-BlueStore::OnodeRef BlueStore::OnodeSpace::lookup(const ghobject_t& oid)
+BlueStore::OnodeRef BlueStore::OnodeSpace::lookup(const ghobject_t& oid)/////////LOOKHERE
 {
   ldout(cache->cct, 30) << __func__ << dendl;
   OnodeRef o;
@@ -5391,9 +5393,31 @@ BlueStore::OnodeRef BlueStore::Collection::get_onode(
     }
   }
 
+
+
+
+
   OnodeRef o = onode_space.lookup(oid);
-  if (o)
+  if (o) {
+    auto cache = get_onode_cache();
+    if (cache) {
+      cache->cache_hits.fetch_add(1, std::memory_order_relaxed); ///////////AARYAN
+      store->logger->inc(l_bluestore_onode_cache_time_latency);
+    }
     return o;
+  }
+  
+  auto cache = get_onode_cache();
+  if (cache) {
+    cache->cache_miss.fetch_add(1, std::memory_order_relaxed);
+  }
+
+/////fault_range  
+////////////////
+auto start = mono_clock::now();
+
+
+////////////////
   BLUE_SCOPE(get_onode);
   string key;
   get_object_key(store->cct, oid, &key);
@@ -5419,6 +5443,13 @@ BlueStore::OnodeRef BlueStore::Collection::get_onode(
   // new object, load onode if available
   on = Onode::create_decode(this, oid, key, v, true, store->segment_size != 0);
   o.reset(on);
+
+//////////
+
+  store->log_latency("cacheonode_lat",
+	l_bluestore_onode_cache_time_latency_time,
+	mono_clock::now() - start,
+	store->cct->_conf->bluestore_log_op_age);
   return onode_space.add_onode(oid, o);
 }
 
@@ -6510,6 +6541,13 @@ void BlueStore::_init_logger()
   b.add_u64_counter(l_bluestore_write_small_skipped_bytes,
       "write_small_skipped_bytes",
       "Small writes into existing or sparse small blobs skipped due to zero detection (bytes)");
+
+  b.add_u64_counter(l_bluestore_onode_cache_time_latency,
+      "onode_cache_time_latency",
+      "onode cache miss latency"); /////////////AARYAN
+  b.add_time_avg(l_bluestore_onode_cache_time_latency_time, "cacheonode_lat",
+      "Average onode read latency",
+      "ro_l", PerfCountersBuilder::PRIO_CRITICAL);
   //****************************************
 
   // compressions stats
@@ -6546,7 +6584,7 @@ void BlueStore::_init_logger()
 		    "o_ht", PerfCountersBuilder::PRIO_USEFUL);
   b.add_u64_counter(l_bluestore_onode_misses, "onode_misses",
 		    "Count of onode cache lookup misses",
-		    "o_ms", PerfCountersBuilder::PRIO_USEFUL);
+		    "o_ms", PerfCountersBuilder::PRIO_USEFUL);         //AARYAN
   b.add_u64_counter(l_bluestore_onode_shard_hits, "onode_shard_hits",
 		    "Count of onode shard cache lookups hits");
   b.add_u64_counter(l_bluestore_onode_shard_misses,
@@ -6579,6 +6617,8 @@ void BlueStore::_init_logger()
 	    NULL,
 	    PerfCountersBuilder::PRIO_DEBUGONLY,
 	    unit_t(UNIT_BYTES));
+b.add_time_avg(l_bluestore_buffer_miss_lat, "buffer_miss_lat", "Avg data cache miss disk latency");
+b.add_u64_counter(l_bluestore_buffer_read_reqs, "buffer_read_reqs", "Total data cache read requests");
   //****************************************
 
   // internal stats
@@ -9538,6 +9578,8 @@ int BlueStore::_umount_readonly()
 int BlueStore::_mount()
 {
   dout(5) << __func__ << " path " << path << dendl;
+
+
 
   {
     int r = read_meta_conf_check_env();
@@ -13170,6 +13212,14 @@ int BlueStore::_do_read(
   _read_cache(o, offset, length, read_cache_policy, ready_regions, blobs2read);
 
 
+
+
+////////AARYAN
+bool is_miss = !blobs2read.empty();
+  ceph::mono_clock::time_point miss_start_time;
+////////////////
+
+
   // read raw blob data.
   start = mono_clock::now(); // for the sake of simplicity
                              // measure the whole block below.
@@ -13184,9 +13234,26 @@ int BlueStore::_do_read(
   int64_t num_ios = blobs2read.size();
   if (ioc.has_pending_aios()) {
     num_ios = ioc.get_num_ios();
+
+
+/////////AARYAN
+    if (is_miss) {
+      miss_start_time = ceph::mono_clock::now();
+    }
+///////////
+
     bdev->aio_submit(&ioc);
     dout(20) << __func__ << " waiting for aio" << dendl;
     ioc.aio_wait();
+
+////////////AARYAN
+// Stop timer immediately after wait ---
+    if (is_miss) {
+      auto miss_end_time = ceph::mono_clock::now();
+      logger->tinc(l_bluestore_buffer_miss_lat, miss_end_time - miss_start_time);
+    }
+/////////
+
     r = ioc.get_return_value();
     if (r < 0) {
       ceph_assert(r == -EIO); // no other errors allowed
@@ -13597,9 +13664,16 @@ int BlueStore::_do_readv(
   auto num_ios = m.size();
   if (ioc.has_pending_aios()) {
     num_ios = ioc.get_num_ios();
+/////////////////////////
+ceph::mono_clock::time_point miss_start_time = ceph::mono_clock::now();
+/////////////////////////
     bdev->aio_submit(&ioc);
     dout(20) << __func__ << " waiting for aio" << dendl;
     ioc.aio_wait();
+///////
+auto miss_end_time = ceph::mono_clock::now();
+    logger->tinc(l_bluestore_buffer_miss_lat, miss_end_time - miss_start_time);
+////////
     r = ioc.get_return_value();
     if (r < 0) {
       ceph_assert(r == -EIO); // no other errors allowed

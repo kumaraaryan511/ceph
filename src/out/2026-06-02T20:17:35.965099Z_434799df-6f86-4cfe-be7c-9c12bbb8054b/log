@@ -1,0 +1,411 @@
+--- begin dump of recent events ---
+  -239> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command assert hook 0xac6af487fec0
+  -238> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command abort hook 0xac6af487fec0
+  -237> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command leak_some_memory hook 0xac6af487fec0
+  -236> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perfcounters_dump hook 0xac6af487fec0
+  -235> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command 1 hook 0xac6af487fec0
+  -234> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perf dump hook 0xac6af487fec0
+  -233> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perfcounters_schema hook 0xac6af487fec0
+  -232> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perf histogram dump hook 0xac6af487fec0
+  -231> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command 2 hook 0xac6af487fec0
+  -230> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perf schema hook 0xac6af487fec0
+  -229> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command counter dump hook 0xac6af487fec0
+  -228> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command counter schema hook 0xac6af487fec0
+  -227> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perf histogram schema hook 0xac6af487fec0
+  -226> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command perf reset hook 0xac6af487fec0
+  -225> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config show hook 0xac6af487fec0
+  -224> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config help hook 0xac6af487fec0
+  -223> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config set hook 0xac6af487fec0
+  -222> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config unset hook 0xac6af487fec0
+  -221> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config get hook 0xac6af487fec0
+  -220> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config diff hook 0xac6af487fec0
+  -219> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command config diff get hook 0xac6af487fec0
+  -218> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command injectargs hook 0xac6af487fec0
+  -217> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command log flush hook 0xac6af487fec0
+  -216> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command log dump hook 0xac6af487fec0
+  -215> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command log reopen hook 0xac6af487fec0
+  -214> 2026-06-02T20:17:35.937+0000 f337f1dea020  5 asok(0xac6af4976000) register_command dump_mempools hook 0xac6af48efc08
+  -213> 2026-06-02T20:17:35.940+0000 f337f1dea020  1 lockdep start
+  -212> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient: get_monmap_and_config
+  -211> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient: build_initial_monmap
+  -210> 2026-06-02T20:17:35.940+0000 f337f1dea020  1 build_initial for_mkfs: 0
+  -209> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient: monmap:
+epoch 0
+fsid c07c43b7-524c-4a4d-a776-43b7d79b030d
+last_changed 2026-06-02T20:17:35.941221+0000
+created 2026-06-02T20:17:35.941221+0000
+min_mon_release 0 (unknown)
+election_strategy: 1
+0: [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] mon.noname-a
+
+  -208> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding auth protocol: cephx
+  -207> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding auth protocol: cephx
+  -206> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding auth protocol: cephx
+  -205> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: secure
+  -204> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: crc
+  -203> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: secure
+  -202> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: crc
+  -201> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: secure
+  -200> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: crc
+  -199> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: crc
+  -198> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: secure
+  -197> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: crc
+  -196> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: secure
+  -195> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: crc
+  -194> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xac6af4a000d8) adding con mode: secure
+  -193> 2026-06-02T20:17:35.940+0000 f337f1dea020  2 auth: KeyRing::load: loaded key file /home/akusername/ceph/src/dev/mgr.x/keyring
+  -192> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 asok(0xac6af4976000) register_command messenger dump hook 0xac6af49c0d40
+  -191> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient: init
+  -190> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding auth protocol: cephx
+  -189> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding auth protocol: cephx
+  -188> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding auth protocol: cephx
+  -187> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: secure
+  -186> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: crc
+  -185> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: secure
+  -184> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: crc
+  -183> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: secure
+  -182> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: crc
+  -181> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: crc
+  -180> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: secure
+  -179> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: crc
+  -178> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: secure
+  -177> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: crc
+  -176> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 AuthRegistry(0xfffffaa39328) adding con mode: secure
+  -175> 2026-06-02T20:17:35.940+0000 f337f1dea020  2 auth: KeyRing::load: loaded key file /home/akusername/ceph/src/dev/mgr.x/keyring
+  -174> 2026-06-02T20:17:35.940+0000 f337f1dea020  2 auth: KeyRing::load: loaded key file /home/akusername/ceph/src/dev/mgr.x/keyring
+  -173> 2026-06-02T20:17:35.940+0000 f337f1dea020  5 asok(0xac6af4976000) register_command rotate-key hook 0xfffffaa394b0
+  -172> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient: _reopen_session rank -1
+  -171> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient: _add_conns ranks=[0]
+  -170> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient(hunting): picked mon.noname-a con 0xac6af48d9600 addr [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0]
+  -169> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient(hunting): start opening mon connection
+  -168> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient(hunting): _renew_subs
+  -167> 2026-06-02T20:17:35.940+0000 f337f1dea020 10 monclient(hunting): authenticate will time out at 3975.603364s
+  -166> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): get_auth_request con 0xac6af48d9600 auth_method 0
+  -165> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): get_auth_request method 2 preferred_modes [2,1]
+  -164> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): _init_auth method 2
+  -163> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): _init_auth creating new auth
+  -162> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): handle_auth_reply_more payload 9
+  -161> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): handle_auth_reply_more payload_len 9
+  -160> 2026-06-02T20:17:35.940+0000 f337ec76b5a0 10 monclient(hunting): handle_auth_reply_more responding with 36 bytes
+  -159> 2026-06-02T20:17:35.941+0000 f337ec76b5a0 10 monclient(hunting): handle_auth_done global_id 4105 payload 274
+  -158> 2026-06-02T20:17:35.941+0000 f337ec76b5a0 10 monclient: _finish_hunting 0
+  -157> 2026-06-02T20:17:35.941+0000 f337ec76b5a0  1 monclient: found mon.noname-a
+  -156> 2026-06-02T20:17:35.941+0000 f337ec76b5a0 10 monclient: _send_mon_message to mon.noname-a at v2:127.0.0.1:40752/0
+  -155> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: handle_monmap mon_map magic: 0
+  -154> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient:  got monmap 1 from mon.noname-a (according to old e1)
+  -153> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: dump:
+epoch 1
+fsid c07c43b7-524c-4a4d-a776-43b7d79b030d
+last_changed 2026-06-02T20:17:35.263617+0000
+created 2026-06-02T20:17:35.263617+0000
+min_mon_release 21 (umbrella)
+election_strategy: 1
+0: [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] mon.a
+
+  -152> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: _finish_auth 0
+  -151> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: _check_auth_tickets
+  -150> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: _check_auth_rotating renewing rotating keys (they expired before 2026-06-02T20:17:05.944807+0000)
+  -149> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: _send_mon_message to mon.a at v2:127.0.0.1:40752/0
+  -148> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: handle_config config(7 keys)
+  -147> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: handle_monmap mon_map magic: 0
+  -146> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient:  got monmap 1 from mon.a (according to old e1)
+  -145> 2026-06-02T20:17:35.943+0000 f337eb74b5a0 10 monclient: dump:
+epoch 1
+fsid c07c43b7-524c-4a4d-a776-43b7d79b030d
+last_changed 2026-06-02T20:17:35.263617+0000
+created 2026-06-02T20:17:35.263617+0000
+min_mon_release 21 (umbrella)
+election_strategy: 1
+0: [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] mon.a
+
+  -144> 2026-06-02T20:17:35.944+0000 f337f1dea020  5 monclient: authenticate success, global_id 4105
+  -143> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 monclient: get_monmap_and_config success
+  -142> 2026-06-02T20:17:35.944+0000 f337f1dea020  4 set_mon_vals no callback set
+  -141> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals debug_mgr = 20/20
+  -140> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals debug_mon = 20/20
+  -139> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals debug_monc = 20/20
+  -138> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals debug_ms = 1/1
+  -137> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals mgr/prometheus/x/server_port = 9283 (unrecognized option)
+  -136> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals osd_pool_default_min_size = 1
+  -135> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 set_mon_vals osd_pool_default_size = 3
+  -134> 2026-06-02T20:17:35.944+0000 f337f1dea020 10 monclient: shutdown
+  -133> 2026-06-02T20:17:35.944+0000 f337f1dea020  5 asok(0xac6af4976000) unregister_commands rotate-key
+  -132> 2026-06-02T20:17:35.944+0000 f337f1dea020 20 monclient: shutdown discarding 0 pending message(s)
+  -131> 2026-06-02T20:17:35.944+0000 f337f1dea020  1 -- 127.0.0.1:0/2634593448 >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9600 msgr2=0xac6af96f6000 secure :-1 s=STATE_CONNECTION_ESTABLISHED l=1).mark_down
+  -130> 2026-06-02T20:17:35.944+0000 f337f1dea020  1 --2- 127.0.0.1:0/2634593448 >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9600 0xac6af96f6000 secure :-1 s=READY pgs=9 gs=1 cs=0 l=1 c_cookie=7116591334107899721 s_cookie=0 reconnecting=0 rev1=1 crypto rx=0xac6af96d46c0 tx=0xac6af96fe300 comp rx=0 tx=0).stop
+  -129> 2026-06-02T20:17:35.945+0000 f337f1dea020  1 -- 127.0.0.1:0/2634593448 shutdown_connections 
+  -128> 2026-06-02T20:17:35.945+0000 f337f1dea020  1 --2- 127.0.0.1:0/2634593448 >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9600 0xac6af96f6000 unknown :-1 s=CLOSED pgs=9 gs=1 cs=0 l=1 c_cookie=7116591334107899721 s_cookie=0 reconnecting=0 rev1=1 crypto rx=0 tx=0 comp rx=0 tx=0).stop
+  -127> 2026-06-02T20:17:35.945+0000 f337f1dea020  1 -- 127.0.0.1:0/2634593448 >> 127.0.0.1:0/2634593448 conn(0xac6af48d9a80 msgr2=0xac6af49d8000 unknown :-1 s=STATE_NONE l=0).mark_down
+  -126> 2026-06-02T20:17:35.945+0000 f337f1dea020  1 -- 127.0.0.1:0/2634593448 shutdown_connections 
+  -125> 2026-06-02T20:17:35.945+0000 f337f1dea020  1 lockdep reusing last freed id 19
+  -124> 2026-06-02T20:17:35.945+0000 f337f1dea020  1 -- 127.0.0.1:0/2634593448 wait complete.
+  -123> 2026-06-02T20:17:35.946+0000 f337f1dea020  1 lockdep reusing last freed id 1
+  -122> 2026-06-02T20:17:35.946+0000 f337f1dea020  0 ceph version 21.0.0-1864-g0ee19106cfd (0ee19106cfd5159d18c3ec75d73b71724a658ea8) umbrella (dev - Debug), process ceph-mgr, pid 45223
+  -121> 2026-06-02T20:17:35.948+0000 f337f1dea020  1 finished global_init_daemonize
+  -120> 2026-06-02T20:17:35.948+0000 f337f1dea020  1 lockdep reusing last freed id 13
+  -119> 2026-06-02T20:17:35.948+0000 f337f1dea020  5 asok(0xac6af4976000) init /home/akusername/ceph/src/asok/mgr.x.asok
+  -118> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) bind_and_listen /home/akusername/ceph/src/asok/mgr.x.asok
+  -117> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) register_command 0 hook 0xac6af4991ba8
+  -116> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) register_command version hook 0xac6af4991ba8
+  -115> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) register_command git_version hook 0xac6af4991ba8
+  -114> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) register_command help hook 0xac6af487eb90
+  -113> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) register_command get_command_descriptions hook 0xac6af487eb80
+  -112> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 asok(0xac6af4976000) register_command raise hook 0xac6af4a549c0
+  -111> 2026-06-02T20:17:35.949+0000 f337ec76b5a0  5 asok(0xac6af4976000) entry start
+  -110> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding auth protocol: cephx
+  -109> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding auth protocol: cephx
+  -108> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding auth protocol: cephx
+  -107> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: secure
+  -106> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: crc
+  -105> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: secure
+  -104> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: crc
+  -103> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: secure
+  -102> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: crc
+  -101> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: crc
+  -100> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: secure
+   -99> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: crc
+   -98> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: secure
+   -97> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: crc
+   -96> 2026-06-02T20:17:35.949+0000 f337f1dea020  5 AuthRegistry(0xac6af97020d8) adding con mode: secure
+   -95> 2026-06-02T20:17:35.949+0000 f337f1dea020  2 auth: KeyRing::load: loaded key file /home/akusername/ceph/src/dev/mgr.x/keyring
+   -94> 2026-06-02T20:17:35.950+0000 f337f1dea020  1  Processor -- start
+   -93> 2026-06-02T20:17:35.951+0000 f337f1dea020  1 --  start start
+   -92> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 asok(0xac6af4976000) register_command status hook 0xac6af487fa80
+   -91> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient: build_initial_monmap
+   -90> 2026-06-02T20:17:35.951+0000 f337f1dea020  1 build_initial for_mkfs: 0
+   -89> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient: monmap:
+epoch 0
+fsid 00000000-0000-0000-0000-000000000000
+last_changed 0.000000
+created 0.000000
+min_mon_release 0 (unknown)
+election_strategy: 1
+0: [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] mon.noname-a
+
+   -88> 2026-06-02T20:17:35.951+0000 f337f1dea020  4 mgr init Registered monc callback
+   -87> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient: init
+   -86> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding auth protocol: cephx
+   -85> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding auth protocol: cephx
+   -84> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding auth protocol: cephx
+   -83> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: secure
+   -82> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: crc
+   -81> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: secure
+   -80> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: crc
+   -79> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: secure
+   -78> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: crc
+   -77> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: crc
+   -76> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: secure
+   -75> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: crc
+   -74> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: secure
+   -73> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: crc
+   -72> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 AuthRegistry(0xfffffaa3ac60) adding con mode: secure
+   -71> 2026-06-02T20:17:35.951+0000 f337f1dea020  2 auth: KeyRing::load: loaded key file /home/akusername/ceph/src/dev/mgr.x/keyring
+   -70> 2026-06-02T20:17:35.951+0000 f337f1dea020  2 auth: KeyRing::load: loaded key file /home/akusername/ceph/src/dev/mgr.x/keyring
+   -69> 2026-06-02T20:17:35.951+0000 f337f1dea020  5 asok(0xac6af4976000) register_command rotate-key hook 0xfffffaa3ade8
+   -68> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient: _reopen_session rank -1
+   -67> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient: _add_conns ranks=[0]
+   -66> 2026-06-02T20:17:35.951+0000 f337f1dea020  1 --2-  >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9a80 0xac6af96f4000 unknown :-1 s=NONE pgs=0 gs=0 cs=0 l=0 c_cookie=0 s_cookie=0 reconnecting=0 rev1=0 crypto rx=0 tx=0 comp rx=0 tx=0).connect
+   -65> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient(hunting): picked mon.noname-a con 0xac6af48d9a80 addr [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0]
+   -64> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient(hunting): start opening mon connection
+   -63> 2026-06-02T20:17:35.951+0000 f337f1dea020  1 --  --> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] -- mon_getmap magic: 0 -- 0xac6af491cc00 con 0xac6af48d9a80
+   -62> 2026-06-02T20:17:35.951+0000 f337f1dea020 10 monclient(hunting): _renew_subs
+   -61> 2026-06-02T20:17:35.952+0000 f337ed78b5a0  1 --2-  >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9a80 0xac6af96f4000 unknown :-1 s=BANNER_CONNECTING pgs=0 gs=1 cs=0 l=0 c_cookie=0 s_cookie=0 reconnecting=0 rev1=0 crypto rx=0 tx=0 comp rx=0 tx=0)._handle_peer_banner_payload supported=3 required=0
+   -60> 2026-06-02T20:17:35.952+0000 f337ed78b5a0  1 --2-  >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9a80 0xac6af96f4000 unknown :-1 s=HELLO_CONNECTING pgs=0 gs=1 cs=0 l=0 c_cookie=0 s_cookie=0 reconnecting=0 rev1=1 crypto rx=0 tx=0 comp rx=0 tx=0).handle_hello peer v2:127.0.0.1:40752/0 says I am v2:127.0.0.1:39900/0 (socket says 127.0.0.1:39900)
+   -59> 2026-06-02T20:17:35.952+0000 f337ed78b5a0  1 -- 127.0.0.1:0/3854483375 learned_addr learned my addr 127.0.0.1:0/3854483375 (peer_addr_for_me v2:127.0.0.1:0/0)
+   -58> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): get_auth_request con 0xac6af48d9a80 auth_method 0
+   -57> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): get_auth_request method 2 preferred_modes [2,1]
+   -56> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): _init_auth method 2
+   -55> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): _init_auth creating new auth
+   -54> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): handle_auth_reply_more payload 9
+   -53> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): handle_auth_reply_more payload_len 9
+   -52> 2026-06-02T20:17:35.952+0000 f337ed78b5a0 10 monclient(hunting): handle_auth_reply_more responding with 36 bytes
+   -51> 2026-06-02T20:17:35.953+0000 f337ed78b5a0 10 monclient(hunting): handle_auth_done global_id 4106 payload 995
+   -50> 2026-06-02T20:17:35.953+0000 f337ed78b5a0 10 monclient: _finish_hunting 0
+   -49> 2026-06-02T20:17:35.953+0000 f337ed78b5a0  1 monclient: found mon.noname-a
+   -48> 2026-06-02T20:17:35.953+0000 f337ed78b5a0 20 monclient: _un_backoff reopen_interval_multipler now 1
+   -47> 2026-06-02T20:17:35.953+0000 f337ed78b5a0 10 monclient: _send_mon_message to mon.noname-a at v2:127.0.0.1:40752/0
+   -46> 2026-06-02T20:17:35.953+0000 f337ed78b5a0  1 -- 127.0.0.1:0/3854483375 --> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] -- mon_subscribe({config=0+,mgrmap=0+,monmap=0+}) -- 0xac6af48bf2c0 con 0xac6af48d9a80
+   -45> 2026-06-02T20:17:35.953+0000 f337ed78b5a0  1 --2- 127.0.0.1:0/3854483375 >> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] conn(0xac6af48d9a80 0xac6af96f4000 secure :-1 s=READY pgs=10 gs=1 cs=0 l=1 c_cookie=14838642988805470468 s_cookie=0 reconnecting=0 rev1=1 crypto rx=0xac6af9707950 tx=0xac6af96ff380 comp rx=0 tx=0).ready entity=mon.0 client_cookie=cded732e08973904 server_cookie=0 in_seq=0 out_seq=0
+   -44> 2026-06-02T20:17:35.954+0000 f337e970b5a0  1 -- 127.0.0.1:0/3854483375 <== mon.0 v2:127.0.0.1:40752/0 1 ==== mon_map magic: 0 ==== 213+0+0 (secure 0 0 0) 0xac6af49156c0 con 0xac6af48d9a80
+   -43> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: handle_monmap mon_map magic: 0
+   -42> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient:  got monmap 1 from mon.noname-a (according to old e1)
+   -41> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: dump:
+epoch 1
+fsid c07c43b7-524c-4a4d-a776-43b7d79b030d
+last_changed 2026-06-02T20:17:35.263617+0000
+created 2026-06-02T20:17:35.263617+0000
+min_mon_release 21 (umbrella)
+election_strategy: 1
+0: [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] mon.a
+
+   -40> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: _finish_auth 0
+   -39> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: _check_auth_tickets
+   -38> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: _check_auth_rotating renewing rotating keys (they expired before 2026-06-02T20:17:05.955163+0000)
+   -37> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: _send_mon_message to mon.a at v2:127.0.0.1:40752/0
+   -36> 2026-06-02T20:17:35.954+0000 f337e970b5a0  1 -- 127.0.0.1:0/3854483375 --> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] -- auth(proto 2 2 bytes epoch 0) -- 0xac6af49196c0 con 0xac6af48d9a80
+   -35> 2026-06-02T20:17:35.954+0000 f337e970b5a0  1 -- 127.0.0.1:0/3854483375 <== mon.0 v2:127.0.0.1:40752/0 2 ==== config(7 keys) ==== 194+0+0 (secure 0 0 0) 0xac6af4918a80 con 0xac6af48d9a80
+   -34> 2026-06-02T20:17:35.954+0000 f337e970b5a0 10 monclient: handle_config config(7 keys)
+   -33> 2026-06-02T20:17:35.954+0000 f337e970b5a0  1 -- 127.0.0.1:0/3854483375 <== mon.0 v2:127.0.0.1:40752/0 3 ==== mgrmap(e 1) ==== 1078+0+0 (secure 0 0 0) 0xac6af491f500 con 0xac6af48d9a80
+   -32> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: debug_mgr : 
+   -31> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback ignored debug_mgr
+   -30> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 20 set_mon_vals debug_mgr = 20/20 (no change)
+   -29> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: debug_mon : 
+   -28> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback ignored debug_mon
+   -27> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 20 set_mon_vals debug_mon = 20/20 (no change)
+   -26> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: debug_monc : 
+   -25> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback ignored debug_monc
+   -24> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 20 set_mon_vals debug_monc = 20/20 (no change)
+   -23> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: debug_ms : 
+   -22> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback ignored debug_ms
+   -21> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 20 set_mon_vals debug_ms = 1/1 (no change)
+   -20> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: mgr/prometheus/x/server_port : 
+   -19> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr[py] Loaded module_config entry mgr/prometheus/x/server_port:
+   -18> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback consumed mgr/prometheus/x/server_port
+   -17> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: osd_pool_default_min_size : 
+   -16> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback ignored osd_pool_default_min_size
+   -15> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 20 set_mon_vals osd_pool_default_min_size = 1 (no change)
+   -14> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 10 mgr operator() config_callback: osd_pool_default_size : 
+   -13> 2026-06-02T20:17:35.954+0000 f337e86eb5a0  4 set_mon_vals callback ignored osd_pool_default_size
+   -12> 2026-06-02T20:17:35.954+0000 f337e86eb5a0 20 set_mon_vals osd_pool_default_size = 3 (no change)
+   -11> 2026-06-02T20:17:35.954+0000 f337f1dea020  5 monclient: authenticate success, global_id 4106
+   -10> 2026-06-02T20:17:35.954+0000 f337f1dea020 20 log_channel(cluster) update_config log_to_monitors true log_to_syslog false log_channels  log_prios info
+    -9> 2026-06-02T20:17:35.954+0000 f337f1dea020 10 log_channel(cluster) update_config to_monitors: true to_syslog: false syslog_facility:  prio: info to_graylog: false graylog_host: 127.0.0.1 graylog_port: 12201)
+    -8> 2026-06-02T20:17:35.954+0000 f337f1dea020 20 log_channel(audit) update_config log_to_monitors true log_to_syslog false log_channels  log_prios info
+    -7> 2026-06-02T20:17:35.954+0000 f337f1dea020 10 log_channel(audit) update_config to_monitors: true to_syslog: false syslog_facility:  prio: info to_graylog: false graylog_host: 127.0.0.1 graylog_port: 12201)
+    -6> 2026-06-02T20:17:35.954+0000 f337f1dea020  5 asok(0xac6af4976000) register_command objecter_requests hook 0xac6af487fa60
+    -5> 2026-06-02T20:17:35.954+0000 f337f1dea020 10 monclient: _renew_subs
+    -4> 2026-06-02T20:17:35.954+0000 f337f1dea020 10 monclient: _send_mon_message to mon.a at v2:127.0.0.1:40752/0
+    -3> 2026-06-02T20:17:35.954+0000 f337f1dea020  1 -- 127.0.0.1:0/3854483375 --> [v2:127.0.0.1:40752/0,v1:127.0.0.1:40753/0] -- mon_subscribe({osdmap=0}) -- 0xac6af48be1e0 con 0xac6af48d9a80
+    -2> 2026-06-02T20:17:35.954+0000 f337f1dea020 10 mgr[py] set PYTHONPATH to ":/home/akusername/ceph/src/pybind:/home/akusername/ceph/build/lib/cython_modules/lib.3:/home/akusername/ceph/src/python-common:"
+    -1> 2026-06-02T20:17:35.961+0000 f337f1dea020 20 mgr[ThreadMonitor] start_monitoring Starting monitoring thread.
+     0> 2026-06-02T20:17:35.964+0000 f337f1dea020 -1 *** Caught signal (Aborted) **
+ in thread f337f1dea020 thread_name:ceph-mgr
+
+ ceph version 21.0.0-1864-g0ee19106cfd (0ee19106cfd5159d18c3ec75d73b71724a658ea8) umbrella (dev - Debug)
+ 1: /home/akusername/ceph/build/bin/ceph-mgr(+0x3dfc3c) [0xac6ad38dfc3c]
+ 2: __kernel_rt_sigreturn()
+ 3: /usr/lib/aarch64-linux-gnu/libc.so.6(+0x8e13c) [0xf337efd0e13c]
+ 4: gsignal()
+ 5: abort()
+ 6: (__gnu_cxx::__verbose_terminate_handler()+0x1d8) [0xf337eff44b58]
+ 7: /usr/lib/aarch64-linux-gnu/libstdc++.so.6(+0xb1ab0) [0xf337eff41ab0]
+ 8: (std::unexpected()+0) [0xf337eff373e4]
+ 9: /usr/lib/aarch64-linux-gnu/libstdc++.so.6(+0xb1e44) [0xf337eff41e44]
+ 10: (std::filesystem::__cxx11::directory_iterator::directory_iterator(std::filesystem::__cxx11::path const&, std::filesystem::directory_options, std::error_code*)+0x330) [0xf337f002c930]
+ 11: (PyModuleRegistry::probe_modules(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const+0x98) [0xac6ad38bd018]
+ 12: (PyModuleRegistry::init()+0x38c) [0xac6ad38bd738]
+ 13: (MgrStandby::init()+0x45c) [0xac6ad38956d0]
+ 14: main()
+ 15: /usr/lib/aarch64-linux-gnu/libc.so.6(+0x22f1c) [0xf337efca2f1c]
+ 16: __libc_start_main()
+ 17: _start()
+ NOTE: a copy of the executable, or `objdump -rdS <executable>` is needed to interpret this.
+
+--- logging levels ---
+   0/ 5 none
+   0/ 1 lockdep
+   0/ 1 context
+   1/ 1 crush
+   1/ 5 mds
+   1/ 5 mds_balancer
+   1/ 5 mds_locker
+   1/ 5 mds_log
+   1/ 5 mds_log_expire
+   1/ 5 mds_migrator
+   3/ 5 mds_quiesce
+   0/ 1 buffer
+   0/ 1 timer
+   0/ 1 filer
+   0/ 1 striper
+   0/ 1 objecter
+   0/ 5 rados
+   0/ 5 rbd
+   0/ 5 rbd_mirror
+   0/ 5 rbd_replay
+   0/ 5 rbd_pwl
+   0/ 5 journaler
+   0/ 5 objectcacher
+   0/ 5 immutable_obj_cache
+   0/ 5 client
+   1/ 5 osd
+   0/ 5 optracker
+   0/ 5 objclass
+   1/ 3 filestore
+   1/ 3 journal
+   1/ 1 ms
+  20/20 mon
+  20/20 monc
+   1/ 5 paxos
+   0/ 5 tp
+   1/ 5 auth
+   1/ 5 crypto
+   1/ 1 finisher
+   1/ 1 reserver
+   1/ 5 heartbeatmap
+   1/ 5 perfcounter
+   1/ 5 rgw
+   1/ 5 rgw_sync
+   1/ 5 rgw_datacache
+   1/ 5 rgw_access
+   1/ 5 rgw_dbstore
+   1/ 5 rgw_flight
+   1/ 5 rgw_lifecycle
+   1/ 5 rgw_restore
+   1/ 5 rgw_notification
+   1/ 5 rgw_bucket_logging
+   1/ 5 javaclient
+   1/ 5 asok
+   1/ 1 throttle
+   0/ 0 refs
+   1/ 5 compressor
+   1/ 5 bluestore
+   1/ 5 bluestore_compression
+   1/ 5 bluefs
+   1/ 3 bdev
+   1/ 5 kstore
+   4/ 5 rocksdb
+   1/ 5 fuse
+  20/20 mgr
+   1/ 5 mgrc
+   1/ 5 dpdk
+   1/ 5 eventtrace
+   1/ 5 prioritycache
+   0/ 5 test
+   0/ 5 cephfs_mirror
+   0/ 5 cephsqlite
+   0/ 5 crimson_interrupt
+   0/ 5 seastore
+   0/ 5 seastore_onode
+   0/ 5 seastore_odata
+   0/ 5 seastore_omap
+   0/ 5 seastore_tm
+   0/ 5 seastore_t
+   0/ 5 seastore_cleaner
+   0/ 5 seastore_epm
+   0/ 5 seastore_lba
+   0/ 5 seastore_fixedkv_tree
+   0/ 5 seastore_cache
+   0/ 5 seastore_journal
+   0/ 5 seastore_device
+   0/ 5 seastore_backref
+   0/ 5 alienstore
+   1/ 5 mclock
+   1/ 5 rgw_dedup
+   0/ 5 cyanstore
+   1/ 5 ceph_exporter
+   1/ 5 memstore
+   1/ 5 trace
+   0/ 5 ceph_dedup
+  -2/-2 (syslog threshold)
+  -1/-1 (stderr threshold)
+--- pthread ID / name mapping for recent threads ---
+  f337e86eb5a0 / io_context_pool
+  f337e970b5a0 / ms_dispatch
+  f337eb74b5a0 / ms_dispatch
+  f337ec76b5a0 / admin_socket, msgr-worker-1, admin_socket, msgr-worker-1
+  f337ed78b5a0 / msgr-worker-1
+  f337f1dea020 / ceph-mgr
+  max_recent     10000
+  max_new         1000
+  log_file /home/akusername/ceph/src/out/2026-06-02T20:17:35.965099Z_434799df-6f86-4cfe-be7c-9c12bbb8054b/log
+--- end dump of recent events ---

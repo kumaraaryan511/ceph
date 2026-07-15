@@ -1,0 +1,393 @@
+diff --git a/src/mon/OSDMonitor.cc b/src/mon/OSDMonitor.cc
+index 0413dc1fa44..a1555f881e7 100644
+--- a/src/mon/OSDMonitor.cc
++++ b/src/mon/OSDMonitor.cc
+@@ -8515,6 +8515,7 @@ int OSDMonitor::prepare_command_pool_set(const cmdmap_t& cmdmap,
+   string val;
+   string interr, floaterr;
+   int64_t n = 0;
++  int64_t round_prev = 0;
+   double f = 0;
+   int64_t uf = 0;  // micro-f
+   cmd_getval(cmdmap, "val", val);
+@@ -9172,6 +9173,17 @@ int OSDMonitor::prepare_command_pool_set(const cmdmap_t& cmdmap,
+         ss << "error parsing int value '" << val << "': " << interr;
+         return -EINVAL;
+       }
++///////////////////////////////////////////////////////////       
++      if (var == "compression_min_blob_size" && (n > 2) && (n < (1LL << 62))) {
++	round_prev = n;
++	n = 1ULL << (64-__builtin_clzll(n-1));
++	  if (n != round_prev) {
++	    dout(1) << "OSDMonitor: Original value was not a power of 2 and therefore invalid, was replaced with automatically with: " << n << ". " << dendl;
++	    ss << "WARNING: The value you chose was invalid, as it is not a power of 2. It was rounded up to " << n << ". ";
++          }		
++      }
++
++//
+     } else if (var == "fingerprint_algorithm") {
+       if (!unset) {
+         auto alg = pg_pool_t::get_fingerprint_from_str(val);
+@@ -9317,7 +9329,12 @@ int OSDMonitor::prepare_command_pool_set(const cmdmap_t& cmdmap,
+     return -EINVAL;
+   }
+   if (val != "unset") {
+-    ss << "set pool " << pool << " " << var << " to " << val;
++    if (var == "compression_min_blob_size" && (n != round_prev)) { ////////////////////////////////////////////////////////////////////////////////
++      round_prev = 0;
++    }
++    else {
++      ss << "set pool " << pool << " " << var << " to " << val;
++    }     
+   } else {
+     ss << "unset pool " << pool << " " << var;
+   }
+diff --git a/src/os/bluestore/BlueAdmin.cc b/src/os/bluestore/BlueAdmin.cc
+index 4a102a35e31..03fb9e74514 100644
+--- a/src/os/bluestore/BlueAdmin.cc
++++ b/src/os/bluestore/BlueAdmin.cc
+@@ -78,6 +78,11 @@ BlueStore::SocketHook::SocketHook(BlueStore& store)
+       this,
+       "print RocksDB sharding");
+     ceph_assert(r == 0);
++    r = admin_socket->register_command(
++      "bluestore cache stats",
++      this,
++      "print cache performance stats"); /////////////AARYAN
++    ceph_assert(r == 0);
+   }
+ }
+ 
+@@ -287,6 +292,106 @@ int BlueStore::SocketHook::call(
+       }
+     }
+     return 0;
++  } else if (command == "bluestore cache stats") {  //////////AARYAN
++
++
++
++    f->open_object_section("cache_stats");
++    f->open_object_section("onode_cache");
++    
++
++/////////////////////////////////
++    uint64_t total_hits = 0;
++    uint64_t total_misses = 0;
++
++
++    
++    for (auto shard : store.onode_cache_shards) {
++      total_hits += shard->cache_hits.load(std::memory_order_relaxed);
++      total_misses += shard->cache_miss.load(std::memory_order_relaxed);
++    }
++    
++    uint64_t total_accesses = total_hits + total_misses;
++    
++    f->dump_unsigned("hits", total_hits);
++    f->dump_unsigned("misses", total_misses);
++    f->dump_unsigned("total_accesses", total_accesses);
++    
++    if (total_accesses > 0) {
++      double hit_ratio = static_cast<double>(total_hits) / static_cast<double>(total_accesses);
++      f->dump_float("hit_ratio", hit_ratio);
++    } else {
++      f->dump_float("hit_ratio", 0.0);
++    }
++    
++
++
++    f->close_section(); // onode_cache
++
++
++
++///start
++// --- INSERT NEW STATS HERE ---
++// --- INSERT NEW STATS HERE ---
++    f->dump_unsigned("onode_hits", store.logger->get(l_bluestore_onode_hits));
++    f->dump_unsigned("onode_misses", store.logger->get(l_bluestore_onode_misses));
++
++    f->open_object_section("cacheonode_lat");
++    // For time_avg, you typically access the accumulated values via the logger
++    f->dump_unsigned("avgcount", store.logger->get(l_bluestore_onode_cache_time_latency_time)); 
++    f->dump_float("sum", (double)store.logger->get(l_bluestore_onode_cache_time_latency_time)); 
++    f->close_section();
++
++    f->dump_unsigned("buffer_hit_bytes", store.logger->get(l_bluestore_buffer_hit_bytes));
++    f->dump_unsigned("buffer_miss_bytes", store.logger->get(l_bluestore_buffer_miss_bytes));
++
++    f->open_object_section("buffer_miss_lat");
++    f->dump_unsigned("avgcount", store.logger->get(l_bluestore_buffer_miss_lat));
++    f->dump_float("sum", (double)store.logger->get(l_bluestore_buffer_miss_lat));
++
++    // --- END INSERTION ---
++    // --- END INSERTION ---
++///end
++
++
++
++    f->close_section(); // cache_stats
++
++
++
++
++    
++
++//////rocksdb
++
++// --- Accessing RocksDB Metrics via Ceph PerfCounters Registry ---
++    f->open_object_section("rocksdb_perf_stats");
++    
++    auto collection = store.cct->get_perfcounters_collection();
++    
++    // Accessing RocksDB Metrics
++    if (collection) {
++        // Using the static_cast fallback to satisfy the compiler
++        collection->dump_formatted(f, false, static_cast<select_labeled_t>(0), "rocksdb", "");
++
++
++
++    } else {
++        f->dump_string("status", "perf counters collection not available");
++    }
++    
++    f->close_section();
++
++//////rocksdbend
++
++
++
++
++///rocksdb true end
++
++
++//////////////////////////
++    return 0;
+   } else {
+     ss << "Invalid command" << std::endl;
+     r = -ENOSYS;
+diff --git a/src/os/bluestore/BlueStore.cc b/src/os/bluestore/BlueStore.cc
+index bf80c9aa795..e18cfcfe779 100644
+--- a/src/os/bluestore/BlueStore.cc
++++ b/src/os/bluestore/BlueStore.cc
+@@ -1924,6 +1924,8 @@ void BlueStore::BufferSpace::read(
+   uint64_t miss_bytes = want_bytes - hit_bytes;
+   cache->logger->inc(l_bluestore_buffer_hit_bytes, hit_bytes);
+   cache->logger->inc(l_bluestore_buffer_miss_bytes, miss_bytes);
++
++  cache->logger->inc(l_bluestore_buffer_read_reqs, 1);//////AARYAN
+ }
+ 
+ void BlueStore::BufferSpace::_finish_write(BufferCacheShard* cache,
+@@ -2081,7 +2083,7 @@ void BlueStore::OnodeSpace::_remove(const ghobject_t& oid)
+   onode_map.erase(oid);
+ }
+ 
+-BlueStore::OnodeRef BlueStore::OnodeSpace::lookup(const ghobject_t& oid)
++BlueStore::OnodeRef BlueStore::OnodeSpace::lookup(const ghobject_t& oid)/////////LOOKHERE
+ {
+   ldout(cache->cct, 30) << __func__ << dendl;
+   OnodeRef o;
+@@ -5391,9 +5393,31 @@ BlueStore::OnodeRef BlueStore::Collection::get_onode(
+     }
+   }
+ 
++
++
++
++
+   OnodeRef o = onode_space.lookup(oid);
+-  if (o)
++  if (o) {
++    auto cache = get_onode_cache();
++    if (cache) {
++      cache->cache_hits.fetch_add(1, std::memory_order_relaxed); ///////////AARYAN
++      store->logger->inc(l_bluestore_onode_cache_time_latency);
++    }
+     return o;
++  }
++  
++  auto cache = get_onode_cache();
++  if (cache) {
++    cache->cache_miss.fetch_add(1, std::memory_order_relaxed);
++  }
++
++/////fault_range  
++////////////////
++auto start = mono_clock::now();
++
++
++////////////////
+   BLUE_SCOPE(get_onode);
+   string key;
+   get_object_key(store->cct, oid, &key);
+@@ -5419,6 +5443,13 @@ BlueStore::OnodeRef BlueStore::Collection::get_onode(
+   // new object, load onode if available
+   on = Onode::create_decode(this, oid, key, v, true, store->segment_size != 0);
+   o.reset(on);
++
++//////////
++
++  store->log_latency("cacheonode_lat",
++	l_bluestore_onode_cache_time_latency_time,
++	mono_clock::now() - start,
++	store->cct->_conf->bluestore_log_op_age);
+   return onode_space.add_onode(oid, o);
+ }
+ 
+@@ -6510,6 +6541,13 @@ void BlueStore::_init_logger()
+   b.add_u64_counter(l_bluestore_write_small_skipped_bytes,
+       "write_small_skipped_bytes",
+       "Small writes into existing or sparse small blobs skipped due to zero detection (bytes)");
++
++  b.add_u64_counter(l_bluestore_onode_cache_time_latency,
++      "onode_cache_time_latency",
++      "onode cache miss latency"); /////////////AARYAN
++  b.add_time_avg(l_bluestore_onode_cache_time_latency_time, "cacheonode_lat",
++      "Average onode read latency",
++      "ro_l", PerfCountersBuilder::PRIO_CRITICAL);
+   //****************************************
+ 
+   // compressions stats
+@@ -6546,7 +6584,7 @@ void BlueStore::_init_logger()
+ 		    "o_ht", PerfCountersBuilder::PRIO_USEFUL);
+   b.add_u64_counter(l_bluestore_onode_misses, "onode_misses",
+ 		    "Count of onode cache lookup misses",
+-		    "o_ms", PerfCountersBuilder::PRIO_USEFUL);
++		    "o_ms", PerfCountersBuilder::PRIO_USEFUL);         //AARYAN
+   b.add_u64_counter(l_bluestore_onode_shard_hits, "onode_shard_hits",
+ 		    "Count of onode shard cache lookups hits");
+   b.add_u64_counter(l_bluestore_onode_shard_misses,
+@@ -6579,6 +6617,8 @@ void BlueStore::_init_logger()
+ 	    NULL,
+ 	    PerfCountersBuilder::PRIO_DEBUGONLY,
+ 	    unit_t(UNIT_BYTES));
++b.add_time_avg(l_bluestore_buffer_miss_lat, "buffer_miss_lat", "Avg data cache miss disk latency");
++b.add_u64_counter(l_bluestore_buffer_read_reqs, "buffer_read_reqs", "Total data cache read requests");
+   //****************************************
+ 
+   // internal stats
+@@ -9539,6 +9579,8 @@ int BlueStore::_mount()
+ {
+   dout(5) << __func__ << " path " << path << dendl;
+ 
++
++
+   {
+     int r = read_meta_conf_check_env();
+     if (r < 0) {
+@@ -13170,6 +13212,14 @@ int BlueStore::_do_read(
+   _read_cache(o, offset, length, read_cache_policy, ready_regions, blobs2read);
+ 
+ 
++
++
++////////AARYAN
++bool is_miss = !blobs2read.empty();
++  ceph::mono_clock::time_point miss_start_time;
++////////////////
++
++
+   // read raw blob data.
+   start = mono_clock::now(); // for the sake of simplicity
+                              // measure the whole block below.
+@@ -13184,9 +13234,26 @@ int BlueStore::_do_read(
+   int64_t num_ios = blobs2read.size();
+   if (ioc.has_pending_aios()) {
+     num_ios = ioc.get_num_ios();
++
++
++/////////AARYAN
++    if (is_miss) {
++      miss_start_time = ceph::mono_clock::now();
++    }
++///////////
++
+     bdev->aio_submit(&ioc);
+     dout(20) << __func__ << " waiting for aio" << dendl;
+     ioc.aio_wait();
++
++////////////AARYAN
++// Stop timer immediately after wait ---
++    if (is_miss) {
++      auto miss_end_time = ceph::mono_clock::now();
++      logger->tinc(l_bluestore_buffer_miss_lat, miss_end_time - miss_start_time);
++    }
++/////////
++
+     r = ioc.get_return_value();
+     if (r < 0) {
+       ceph_assert(r == -EIO); // no other errors allowed
+@@ -13597,9 +13664,16 @@ int BlueStore::_do_readv(
+   auto num_ios = m.size();
+   if (ioc.has_pending_aios()) {
+     num_ios = ioc.get_num_ios();
++/////////////////////////
++ceph::mono_clock::time_point miss_start_time = ceph::mono_clock::now();
++/////////////////////////
+     bdev->aio_submit(&ioc);
+     dout(20) << __func__ << " waiting for aio" << dendl;
+     ioc.aio_wait();
++///////
++auto miss_end_time = ceph::mono_clock::now();
++    logger->tinc(l_bluestore_buffer_miss_lat, miss_end_time - miss_start_time);
++////////
+     r = ioc.get_return_value();
+     if (r < 0) {
+       ceph_assert(r == -EIO); // no other errors allowed
+diff --git a/src/os/bluestore/BlueStore.h b/src/os/bluestore/BlueStore.h
+index 1d2fa4b6a58..033c64d983e 100644
+--- a/src/os/bluestore/BlueStore.h
++++ b/src/os/bluestore/BlueStore.h
+@@ -186,6 +186,8 @@ enum {
+   l_bluestore_extents,
+   l_bluestore_blobs,
+   l_bluestore_spanning_blobs,
++  l_bluestore_onode_cache_time_latency,                         //AARYAN
++  l_bluestore_onode_cache_time_latency_time, 
+   //****************************************
+ 
+   // buffer cache stats
+@@ -194,6 +196,8 @@ enum {
+   l_bluestore_buffer_bytes,
+   l_bluestore_buffer_hit_bytes,
+   l_bluestore_buffer_miss_bytes,
++  l_bluestore_buffer_miss_lat, ///////////AARYAN
++  l_bluestore_buffer_read_reqs,
+   //****************************************
+ 
+   // internal stats
+@@ -250,7 +254,9 @@ enum {
+   l_bluestore_runtime_frag_lat,
+   l_bluestore_static_frag_lat,
+   //****************************************
++
+   l_bluestore_last
++  
+ };
+ 
+ #define META_POOL_ID ((uint64_t)-1ull)
+@@ -1559,7 +1565,13 @@ public:
+   struct OnodeCacheShard : public CacheShard {
+     std::array<std::pair<ghobject_t, ceph::mono_clock::time_point>, 64> dumped_onodes;
+ 
++    
++
+   public:
++
++    std::atomic<uint64_t> cache_hits{0};
++    std::atomic<uint64_t> cache_miss{0};/////////AARYAN
++
+     OnodeCacheShard(CephContext* cct) : CacheShard(cct) {}
+     static OnodeCacheShard *create(CephContext* cct, std::string type,
+                                    PerfCounters *logger);
+diff --git a/src/test/objectstore/Allocator_aging_fragmentation.cc b/src/test/objectstore/Allocator_aging_fragmentation.cc
+index f96baa06501..86150c5efc7 100755
+--- a/src/test/objectstore/Allocator_aging_fragmentation.cc
++++ b/src/test/objectstore/Allocator_aging_fragmentation.cc
+@@ -461,4 +461,4 @@ TEST_P(AllocTest, test_bonus_empty_fragmented)
+ INSTANTIATE_TEST_SUITE_P(
+   Allocator,
+   AllocTest,
+-  ::testing::Values("stupid", "bitmap", "avl", "btree"));
++  ::testing::Values("stupid", "bitmap", "avl", "btree"));
+\ No newline at end of file
