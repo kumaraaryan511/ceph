@@ -1,0 +1,14 @@
+diff --git a/src/nvmeof/gateway b/src/nvmeof/gateway
+index e27436eddac..c862723fe6d 160000
+--- a/src/nvmeof/gateway
++++ b/src/nvmeof/gateway
+@@ -1 +1 @@
+-Subproject commit e27436eddacf8d4b2eace77c5fbd250adf48a155
++Subproject commit c862723fe6dcc2fd3d5217b7fd4772e5311c352e
+diff --git a/src/rocksdb b/src/rocksdb
+index 24ea35870fe..c7a7c6340c5 160000
+--- a/src/rocksdb
++++ b/src/rocksdb
+@@ -1 +1 @@
+-Subproject commit 24ea35870fe9b3ba15285ec8746ba97ed5d67ff3
++Subproject commit c7a7c6340c522d2ecc21625e2b726554cb61eb72

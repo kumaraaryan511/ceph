@@ -188,6 +188,7 @@ enum {
   l_bluestore_spanning_blobs,
   l_bluestore_onode_cache_time_latency,                         //AARYAN
   l_bluestore_onode_cache_time_latency_time, 
+  l_bluestore_onode_shard_miss_lat,
   //****************************************
 
   // buffer cache stats

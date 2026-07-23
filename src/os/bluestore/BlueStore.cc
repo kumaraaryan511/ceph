@@ -4358,6 +4358,7 @@ void BlueStore::ExtentMap::maybe_load_shard(
     ceph_assert((size_t)start < shards.size());
     auto p = &shards[start];
     if (!p->loaded) {
+       auto shard_load_start = ceph::mono_clock::now();
       BLUE_SCOPE(maybe_load_shard);
       dout(30) << __func__ << " opening shard 0x" << std::hex
 	       << p->shard_info->offset << std::dec << dendl;
@@ -4383,6 +4384,12 @@ void BlueStore::ExtentMap::maybe_load_shard(
 	       << " (" << v.length() << " bytes)" << dendl;
       ceph_assert(p->dirty == false);
       ceph_assert(v.length() == p->shard_info->bytes);
+
+      auto shard_load_end = ceph::mono_clock::now();
+      onode->c->store->logger->tinc(l_bluestore_onode_shard_miss_lat, 
+                                     shard_load_end - shard_load_start);
+
+
       onode->c->store->logger->inc(l_bluestore_onode_shard_misses);
     } else {
       onode->c->store->logger->inc(l_bluestore_onode_shard_hits);
@@ -6548,6 +6555,14 @@ void BlueStore::_init_logger()
   b.add_time_avg(l_bluestore_onode_cache_time_latency_time, "cacheonode_lat",
       "Average onode read latency",
       "ro_l", PerfCountersBuilder::PRIO_CRITICAL);
+
+
+  b.add_time_avg(l_bluestore_onode_shard_miss_lat,
+               "onode_shard_miss_lat",
+               "Average onode shard miss latency"); 
+
+
+
   //****************************************
 
   // compressions stats
