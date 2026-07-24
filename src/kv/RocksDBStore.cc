@@ -1899,6 +1899,15 @@ int RocksDBStore::get(
 {
   rocksdb::PinnableSlice value;
   utime_t start = ceph_clock_now();
+
+uint64_t hits_before = 0, misses_before = 0;
+  if (dbstats) {
+    hits_before = dbstats->getTickerCount(rocksdb::BLOCK_CACHE_HIT);
+    misses_before = dbstats->getTickerCount(rocksdb::BLOCK_CACHE_MISS);
+  }
+///////aaryan
+
+
   if (cf_handles.count(prefix) > 0) {
     for (auto& key : keys) {
       auto cf_handle = get_cf_handle(prefix, key);
@@ -1929,6 +1938,24 @@ int RocksDBStore::get(
     }
   }
   utime_t lat = ceph_clock_now() - start;
+
+
+//////////
+ 
+
+    //misses_after = dbstats->getTickerCount(rocksdb::BLOCK_CACHE_MISS);
+    
+    //if misses_after > misses_before
+    //  if prefix == "O" //onodemetadata
+    //    logger->tinc(l_rocksdb_onode_cache_miss_lat, lat);
+   //   else
+    //    logger->tinc(l_rocksdb_data_cache_miss_lat, lat);
+
+
+
+
+
+
   logger->tinc(l_rocksdb_get_latency, lat);
   return 0;
 }

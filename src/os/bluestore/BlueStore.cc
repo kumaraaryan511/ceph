@@ -6600,6 +6600,13 @@ void BlueStore::_init_logger()
   b.add_u64_counter(l_bluestore_onode_misses, "onode_misses",
 		    "Count of onode cache lookup misses",
 		    "o_ms", PerfCountersBuilder::PRIO_USEFUL);         //AARYAN
+  b.add_time_avg(l_bluestore_rocksdb_onode_cache_miss_lat,
+               "rocksdb_onode_cache_miss_lat",
+               "Average RocksDB onode cache miss latency");
+  b.add_time_avg(l_bluestore_rocksdb_data_cache_miss_lat,
+               "rocksdb_data_cache_miss_lat",
+               "Average RocksDB data cache miss latency");
+
   b.add_u64_counter(l_bluestore_onode_shard_hits, "onode_shard_hits",
 		    "Count of onode shard cache lookups hits");
   b.add_u64_counter(l_bluestore_onode_shard_misses,
