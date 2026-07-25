@@ -2396,6 +2396,31 @@ private:
   mempool::bluestore_cache_buffer::vector<BufferCacheShard*> buffer_cache_shards;
   mempool::bluestore_cache_onode::vector<OnodeCacheShard*> onode_cache_shards;
 
+public:
+  struct CacheStatsSnapshot {
+    ceph::mono_time timestamp;
+    uint64_t onode_hits;
+    uint64_t onode_misses;
+    uint64_t onode_miss_latency_sum;
+    uint64_t onode_shard_hits;
+    uint64_t onode_shard_misses;
+    uint64_t onode_shard_miss_latency_sum;
+    uint64_t buffer_read_reqs;
+    uint64_t buffer_miss_count;
+    uint64_t buffer_miss_latency_sum;
+    
+    CacheStatsSnapshot()
+      : timestamp(ceph::mono_clock::zero()),
+        onode_hits(0), onode_misses(0), onode_miss_latency_sum(0),
+        onode_shard_hits(0), onode_shard_misses(0), onode_shard_miss_latency_sum(0),
+        buffer_read_reqs(0), buffer_miss_count(0), buffer_miss_latency_sum(0) {}
+  };
+
+  ceph::mutex cache_stats_lock = ceph::make_mutex("BlueStore::cache_stats_lock");
+  std::deque<CacheStatsSnapshot> cache_stats_snapshots;
+  static constexpr size_t MAX_CACHE_SNAPSHOTS = 5;
+
+private:
   /// protect zombie_osr_set
   ceph::mutex zombie_osr_lock = ceph::make_mutex("BlueStore::zombie_osr_lock");
   uint32_t next_sequencer_id = 0;
@@ -2437,8 +2462,10 @@ private:
   std::deque<DeferredBatch*> deferred_stable_to_finalize; ///< pending finalization
   bool kv_finalize_in_progress = false;
 
+public:
   PerfCounters *logger = nullptr;
 
+private:
   std::list<CollectionRef> removed_collections;
 
   ceph::shared_mutex debug_read_error_lock =
