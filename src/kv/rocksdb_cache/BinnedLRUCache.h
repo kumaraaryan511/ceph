@@ -180,6 +180,10 @@ enum stat_e : int {
   l_lookups,      // increased when trying to find element in shard
   l_hits,         // increased when lookup successful
   l_misses,       // calculated from lookups - hits
+  l_miss_latency_sum_onode,  // sum of all sampled miss latencies in microseconds
+  l_miss_latency_count_onode, // count of sampled misses with measured latency
+  l_miss_latency_sum_default,  // sum of all sampled miss latencies in microseconds
+  l_miss_latency_count_default, // count of sampled misses with measured latency
   stat_cnt
 };
 
@@ -198,6 +202,10 @@ struct ShardStats {
     "lookups",
     "hits",
     "misses",
+    "miss_latency_sum_onode",
+    "miss_latency_count_onode",
+    "miss_latency_sum_default",
+    "miss_latency_count_default",
   };
   static constexpr char const* stat_descr[stat_cnt] = {
     "capacity assigned",
@@ -208,6 +216,10 @@ struct ShardStats {
     "lookups for an element",
     "lookup successful",
     "lookup failure",
+    "sum of onode cache miss latencies",
+    "count of onode cache misses with latency",
+    "sum of default cache miss latencies",
+    "count of default cache misses with latency",
   };
   void add(const ShardStats& other) {
     for (int j = 0; j < stat_cnt; j++) {
@@ -372,6 +384,12 @@ class alignas(CACHE_LINE_SIZE) BinnedLRUCacheShard : public CacheShard {
 
   // Circular buffer of byte counters for age binning
   boost::circular_buffer<std::shared_ptr<uint64_t>> age_bins;
+
+  // Track sampled cache misses for latency measurement (1/10 sampling)
+  // HashMap: key -> timestamp (for fast lookup on insert)
+  std::unordered_map<std::string, ceph::mono_time> sampled_miss_map;
+  // Sorted tree: timestamp -> key (for efficient cleanup of old entries)
+  std::map<ceph::mono_time, std::string> sampled_miss_tree;
 };
 
 class BinnedLRUCache : public ShardedCache {

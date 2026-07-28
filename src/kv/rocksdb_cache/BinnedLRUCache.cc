@@ -358,6 +358,35 @@ rocksdb::Cache::Handle* BinnedLRUCacheShard::Lookup(const rocksdb::Slice& key, u
     e->refs++;
     e->SetHit();
     stats[l_hits]++;
+  } else {
+    // cache miss, lets sample 1 out of 10
+    if (hash % 10 == 0) {
+      std::string key_str(key.data(), key.size());
+      auto now = ceph::mono_clock::now();
+      sampled_miss_map[key_str] = now;//hashmap
+      sampled_miss_tree[now] = key_str;//tree
+      
+      dout(20) << __func__ << " SAMPLED MISS: key=" << key_str << dendl;
+    
+    
+    // cleanup old entries older than a minute once the oldest entry is over 2 minutes old, makes the oldest possible entry up to 2 minutes while making sure a entry has at least 1 minute to get inserted, and also only cleans up at most every minute in worst case
+      auto oldest = sampled_miss_tree.begin();
+      auto age = std::chrono::duration_cast<std::chrono::seconds>(now - oldest->first).count();
+      
+      if (age > 120) {//2min
+        auto cutoff = now - std::chrono::seconds(60);  //1min
+        
+        //remove everything older than a minute
+        auto it = sampled_miss_tree.begin();
+        while (it != sampled_miss_tree.end() && it->first < cutoff) {
+          sampled_miss_map.erase(it->second);  //remove from hashmap
+          it = sampled_miss_tree.erase(it);     //remove form tree
+        }
+        
+        dout(15) << __func__ << " Cleaned up stale miss timestamps, "
+                 << "remaining entries: " << sampled_miss_map.size() << dendl;
+      }
+    }
   }
   return reinterpret_cast<rocksdb::Cache::Handle*>(e);
 }
@@ -446,6 +475,42 @@ rocksdb::Status BinnedLRUCacheShard::Insert(const rocksdb::Slice& key, uint32_t 
     std::lock_guard<std::mutex> l(mutex_);
     stats[l_elems]++;
     stats[l_inserts]++;
+    
+    // Check if this insert corresponds to a sampled cache miss
+    std::string key_str(key.data(), key.size());
+    auto miss_it = sampled_miss_map.find(key_str);
+    if (miss_it != sampled_miss_map.end()) {
+      // Calculate latency in microseconds
+      auto now = ceph::mono_clock::now();
+      auto latency_us = std::chrono::duration_cast<std::chrono::microseconds>(
+        now - miss_it->second).count();
+      
+      // Determine if this is an onode (PREFIX_OBJ = "O") or default cache
+      bool is_onode = (key.size() > 0 && key.data()[0] == 'O');
+      
+      if (is_onode) {
+        stats[l_miss_latency_sum_onode] += latency_us;
+        stats[l_miss_latency_count_onode]++;
+      } else {
+        stats[l_miss_latency_sum_default] += latency_us;
+        stats[l_miss_latency_count_default]++;
+      }
+      
+      // Remove from tracking maps
+      sampled_miss_map.erase(miss_it);
+      // Also remove from tree (find by timestamp)
+      for (auto tree_it = sampled_miss_tree.begin(); tree_it != sampled_miss_tree.end(); ++tree_it) {
+        if (tree_it->second == key_str) {
+          sampled_miss_tree.erase(tree_it);
+          break;
+        }
+      }
+      
+      dout(20) << __func__ << " MEASURED LATENCY: key=" << key_str
+               << " latency=" << latency_us << "us"
+               << " is_onode=" << is_onode << dendl;
+    }
+    
     // Free the space following strict LRU policy until enough space
     // is freed or the lru list is empty
     EvictFromLRU(charge, deleted);

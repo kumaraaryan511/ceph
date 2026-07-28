@@ -78,6 +78,11 @@ BlueStore::SocketHook::SocketHook(BlueStore& store)
       this,
       "print RocksDB sharding");
     ceph_assert(r == 0);
+    r = admin_socket->register_command(
+      "rocks cache stats",
+      this,
+      "print cache performance stats");
+    ceph_assert(r == 0);
   }
 }
 
@@ -286,6 +291,17 @@ int BlueStore::SocketHook::call(
         c->object_read_samples.store(0, std::memory_order_relaxed);
       }
     }
+    return 0;
+  } else if (command == "rocks cache stats") {
+    f->open_object_section("rocksdb_cache_latency");
+    
+    // Get perf counters collection to access RocksDB cache stats
+    auto collection = store.cct->get_perfcounters_collection();
+    if (collection) {
+      collection->dump_formatted(f, false, static_cast<PerfCountersCollection::select_labeled_t>(0), "rocksdb-cache", "");
+    }
+    
+    f->close_section();
     return 0;
   } else {
     ss << "Invalid command" << std::endl;
