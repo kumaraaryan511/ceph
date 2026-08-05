@@ -293,12 +293,12 @@ int BlueStore::SocketHook::call(
     }
     return 0;
   } else if (command == "rocks cache stats") {
-    f->open_object_section("rocksdb_cache_latency");
+    f->open_object_section("rocksdb_cache_stats");
     
     // Get perf counters collection to access RocksDB cache stats
     auto collection = store.cct->get_perfcounters_collection();
     if (collection) {
-      collection->dump_formatted(f, false, select_labeled_t::unlabeled, "rocksdb-cache", "");
+      collection->dump_formatted(f, false, select_labeled_t::unlabeled, "rocksdb-cache-", "");
     }
     
     f->close_section();
