@@ -378,10 +378,18 @@ rocksdb::Cache::Handle* BinnedLRUCacheShard::Lookup(const rocksdb::Slice& key, u
         
         //remove everything older than a minute
         auto it = sampled_miss_tree.begin();
+        size_t removed_count = 0;
         while (it != sampled_miss_tree.end() && it->first < cutoff) {
+          std::cout << "BinnedLRUCache: Removing stale entry from hashmap: key="
+                    << it->second << std::endl;
           sampled_miss_map.erase(it->second);  //remove from hashmap
           it = sampled_miss_tree.erase(it);     //remove form tree
+          removed_count++;
         }
+        
+        std::cout << "BinnedLRUCache: Cleaned up " << removed_count
+                  << " stale miss timestamps, remaining entries: "
+                  << sampled_miss_map.size() << std::endl;
         
         dout(15) << __func__ << " Cleaned up stale miss timestamps, "
                  << "remaining entries: " << sampled_miss_map.size() << dendl;
@@ -497,6 +505,8 @@ rocksdb::Status BinnedLRUCacheShard::Insert(const rocksdb::Slice& key, uint32_t 
       }
       
       // Remove from tracking maps
+      std::cout << "BinnedLRUCache: Removing entry from hashmap after measuring latency: key="
+                << key_str << " latency=" << latency_us << "us" << std::endl;
       sampled_miss_map.erase(miss_it);
       // Also remove from tree (find by timestamp)
       for (auto tree_it = sampled_miss_tree.begin(); tree_it != sampled_miss_tree.end(); ++tree_it) {

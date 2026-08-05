@@ -298,7 +298,19 @@ int BlueStore::SocketHook::call(
     // Get perf counters collection to access RocksDB cache stats
     auto collection = store.cct->get_perfcounters_collection();
     if (collection) {
+      // First, let's see what perf counters are actually registered
+      f->open_array_section("all_perf_counters");
+      collection->with_counters([f](const PerfCountersCollection::CounterMap &by_path) {
+        for (const auto &[path, perf] : by_path) {
+          f->dump_string("counter", path);
+        }
+      });
+      f->close_section();
+      
+      // Now dump the rocksdb cache counters
+      f->open_object_section("rocksdb_cache_counters");
       collection->dump_formatted(f, false, select_labeled_t::unlabeled, "rocksdb-cache-", "");
+      f->close_section();
     }
     
     f->close_section();
