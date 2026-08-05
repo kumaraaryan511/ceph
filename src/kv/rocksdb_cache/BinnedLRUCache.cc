@@ -900,7 +900,7 @@ void BinnedLRUCache::UpdatePerfCounters() {
   //increment these, so one can reset perf counters
   ShardStats tmp = stats;
   tmp.sub(prev_stats);
-  for (int j = l_inserts; j <= l_misses; j++) {
+  for (int j = l_inserts; j < stat_cnt; j++) {
     perfstats->inc(1 + j, tmp[j]);
   }
   prev_stats = stats;
